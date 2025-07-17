@@ -1,5 +1,6 @@
 import requests
 import os
+import time
 
 from datetime import datetime, timedelta
 
@@ -34,11 +35,11 @@ def main():
                     episode = response2[response2.find("<h3 class='episodeTitle my0'>")+29:response2.find('</h3>')]
                 episode = episode.replace(' / ', '/')
                 show = show[:show.find("</a>")]
+                desc = 'No description available.'
+                if response2.__contains__("<p class='episodeDesc mb0 mt1 font-light'>"):
+                    desc = response2[response2.find("<p class='episodeDesc mb0 mt1 font-light'>")+42:response2.find("</p></div><div class='col-md-2'>")]
                 # If new episode is detected, crosscheck with PBS WGTE for potential mislabeling
                 # (some already aired episodes labeled as 'new' on WHRO)
-                # Dev Note: Some new episodes on WGTE can't be read as for not having proper URLs
-                # for episodes, using episode numbers and ambiguous details rather than titles
-                # Unrelated note NEW XAVIER RIDDLE IN AUGUST!!!
                 if episode not in episodes and response2.__contains__("<span class='new'>"):
                     crossShow = show.replace(' ', '-')
                     crossShow = crossShow.replace("'", '')
@@ -94,6 +95,14 @@ def main():
                                 desc = desc.replace('&#039;', "'")
                                 desc = desc.replace('&quot;', "'")
                                 print(f'{show}: {episodeNew} - {desc}')
+                        # If new episode but page does not exist on WGTE
+                        elif episodeNew not in episodes:
+                            episodes.append(episode)
+                            episodeNew = episode[:episode.find(' <span')]
+                            if newDate:
+                                print(f'\nNew episodes for {date}:')
+                                newDate = False
+                            print(f'{show}: {episodeNew} - {desc}')
 
 os.system('cls') # Clears terminal; replace with os.system('clear') if on Unix/Linux/Mac
 main()
