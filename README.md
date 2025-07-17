@@ -1,4 +1,2 @@
 # PBSNewEpisodeChecker
 A script that finds and prints all new/upcoming episodes on PBS Kids' schedule. The script will read all dates between the current date and a year after, gathering all schedule details for each day from PBS WHRO's site, and checks if an episode/special is new or not. If new, the episode/special is cross-referenced with PBS WGTE (as to not print already aired episodes/specials as 'new'), cutting down the list and all new episodes are printed with its corresponding date.
-
-Note: Episodes/specials with ambiguous details on WGTE's URL will cause the new episode to not be printed, but all normal cases should print. That being said, new Xavier Riddle in August!!!
